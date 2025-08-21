@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Acme Real Estate</title>
+  <meta name="description" content="Acme Real Estate – Buy, sell, or rent homes with trusted local experts." />
+  <style>
+    /* --- Base / Reset --- */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #0b1320;         /* deep navy */
+      --card: #111a2b;       /* card surface */
+      --accent: #5dd3ff;     /* bright accent */
+      --text: #e9eef6;       /* primary text */
+      --muted: #a8b3c7;      /* secondary text */
+      --ok: #26c281;         /* success */
+      --warn: #ffce3a;       /* attention */
+      --danger: #ff6b6b;     /* danger */
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 1100px;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text); background: radial-gradient(1200px 800px at 80% -10%, #123 0%, #0b1320 50%, #070e18 100%);
+    }
+    img { max-width: 100%; display: block; border-radius: calc(var(--radius) - 6px); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* --- Layout helpers --- */
+    .container { width: min(92%, var(--maxw)); margin-inline: auto; }
+    .grid { display: grid; gap: 18px; }
+
+    /* --- Header / Nav --- */
+    header {
+      position: sticky; top: 0; z-index: 999;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(10,16,28,.9), rgba(10,16,28,.65));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display: flex; gap: 10px; align-items: center; font-weight: 700; letter-spacing: .3px; }
+    .brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #8df5ff); box-shadow: var(--shadow); }
+    .nav a { color: var(--text); opacity: .9; margin-left: 18px; }
+    .btn { display: inline-block; padding: 10px 14px; border-radius: 10px; font-weight: 600; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent), #8df5ff); color: #05111d; border: none; }
+
+    /* --- Hero --- */
+    .hero { padding: 68px 0 36px; }
+    .hero-inner { display: grid; gap: 24px; grid-template-columns: 1.2fr .8fr; align-items: center; }
+    .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 10px; }
+    .hero p { color: var(--muted); margin: 0 0 20px; }
+    .searchbar { display: grid; grid-template-columns: 1fr auto; background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: var(--radius); padding: 10px; box-shadow: var(--shadow); }
+    .searchbar input { background: transparent; border: none; outline: none; color: var(--text); padding: 10px 12px; font-size: 16px; }
+
+    /* --- Section headings --- */
+    .section { padding: 36px 0; }
+    .section h2 { font-size: clamp(22px, 3.5vw, 32px); margin: 0 0 4px; }
+    .section p.lead { color: var(--muted); margin: 0 0 18px; }
+
+    /* --- Cards / Listings --- */
+    .cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card {
+      background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+      display: flex; flex-direction: column; transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 14px 38px rgba(0,0,0,.45); }
+    .card-body { padding: 14px; gap: 10px; display: grid; }
+    .price { font-weight: 800; }
+    .pill { display: inline-block; font-size: 12px; padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); }
+    .status.available { background: rgba(38, 194, 129, .12); border-color: rgba(38,194,129,.35); color: #b9f5de; }
+
+    /* --- About / Agents / Testimonials --- */
+    .stack { display: grid; gap: 18px; }
+    .about { background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); border: 1px solid rgba(255,255,255,.06); padding: 18px; border-radius: var(--radius); }
+    .avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+    .agent { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; background: var(--card); padding: 12px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,.06); }
+    .rating { font-size: 14px; color: var(--warn); }
+
+    /* --- Contact --- */
+    form { display: grid; gap: 10px; }
+    label { font-weight: 600; font-size: 14px; }
+    input, textarea, select {
+      width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04); color: var(--text);
+    }
+    textarea { min-height: 120px; resize: vertical; }
+
+    /* --- Footer --- */
+    footer { padding: 28px 0 44px; color: var(--muted); border-top: 1px solid rgba(255,255,255,.06); margin-top: 36px; }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Acme Real Estate</span>
+      </div>
+      <nav aria-label="primary">
+        <a href="#listings">Listings</a>
+        <a href="#about">About</a>
+        <a href="#agents">Agents</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact" class="btn">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <h1>Your dream home awaits.</h1>
+        <p>Buy, sell, or rent with trusted local experts. Explore curated listings across the city with transparent pricing and virtual tours.</p>
+        <form class="searchbar" role="search" aria-label="Search homes">
+          <input type="search" name="q" placeholder="Search by city, neighborhood, or ZIP…" aria-label="Search" />
+          <button class="btn primary" type="submit">Search</button>
+        </form>
+      </div>
+      <div>
+        <img src="https://images.unsplash.com/photo-1560185007-c5ca9d2c5882?q=80&w=1400&auto=format&fit=crop" alt="Modern house exterior at sunset" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Listings -->
+  <section id="listings" class="section">
+    <div class="container">
+      <h2>Featured Listings</h2>
+      <p class="lead">Hand‑picked homes available now. Book a viewing or request a virtual tour.</p>
+
+      <div class="grid cards">
+        <!-- Card 1 -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1600585154340-1eac06f5d45e?q=80&w=1200&auto=format&fit=crop" alt="Contemporary villa with pool" />
+          <div class="card-body">
+            <div class="pill status available">For Sale</div>
+            <h3>Contemporary Villa</h3>
+            <div class="price">₹ 2.4 Cr</div>
+            <p class="muted">4 Bed • 3 Bath • 2,900 sq ft • Jubilee Hills</p>
+            <a class="btn" href="#contact">Book a Visit</a>
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c52f?q=80&w=1200&auto=format&fit=crop" alt="High‑rise apartment living room" />
+          <div class="card-body">
+            <div class="pill">For Rent</div>
+            <h3>Skyline Apartment</h3>
+            <div class="price">₹ 55,000 / mo</div>
+            <p class="muted">2 Bed • 2 Bath • 1,100 sq ft • Gachibowli</p>
+            <a class="btn" href="#contact">Schedule Tour</a>
+          </div>
+        </article>
+        <!-- Card 3 -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop" alt="Cozy suburban house" />
+          <div class="card-body">
+            <div class="pill">For Sale</div>
+            <h3>Suburban Classic</h3>
+            <div class="price">₹ 1.1 Cr</div>
+            <p class="muted">3 Bed • 2 Bath • 1,800 sq ft • Miyapur</p>
+            <a class="btn" href="#contact">Details</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2>About Our Agency</h2>
+      <div class="about stack">
+        <p>We’re a boutique team focused on transparency and results. From first showing to closing, our agents use data‑driven pricing and local expertise to maximize value.</p>
+        <ul>
+          <li>10+ years serving buyers & sellers</li>
+          <li>Free home valuation & staging tips</li>
+          <li>End‑to‑end support: legal, loans, and paperwork</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agents -->
+  <section id="agents" class="section">
+    <div class="container">
+      <h2>Meet Our Agents</h2>
+      <p class="lead">Local specialists with top ratings.</p>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+        <div class="agent">
+          <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Agent Priya Sharma" />
+          <div>
+            <strong>Priya Sharma</strong>
+            <div class="muted">Luxury Homes • 8 yrs exp</div>
+          </div>
+          <div class="rating" aria-label="4.9 out of 5">★ 4.9</div>
+        </div>
+        <div class="agent">
+          <img class="avatar" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=400&auto=format&fit=crop" alt="Agent Arjun Rao" />
+          <div>
+            <strong>Arjun Rao</strong>
+            <div class="muted">Apartments • 6 yrs exp</div>
+          </div>
+          <div class="rating" aria-label="4.8 out of 5">★ 4.8</div>
+        </div>
+        <div class="agent">
+          <img class="avatar" src="https://images.unsplash.com/photo-1546525848-3ce03ca516f6?q=80&w=400&auto=format&fit=crop" alt="Agent Neha Patel" />
+          <div>
+            <strong>Neha Patel</strong>
+            <div class="muted">Rentals • 5 yrs exp</div>
+          </div>
+          <div class="rating" aria-label="4.7 out of 5">★ 4.7</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="section">
+    <div class="container">
+      <h2>Happy Clients</h2>
+      <div class="grid cards" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+        <blockquote class="card" style="padding: 14px;">
+          <p>“Smooth process end to end. We sold above asking in 5 days.”</p>
+          <cite class="muted">— Kavya & Rohan</cite>
+        </blockquote>
+        <blockquote class="card" style="padding: 14px;">
+          <p>“Responsive, honest, and great negotiators. Highly recommend.”</p>
+          <cite class="muted">— Anil Kumar</cite>
+        </blockquote>
+        <blockquote class="card" style="padding: 14px;">
+          <p>“Found our perfect rental within a week. Loved the virtual tour!”</p>
+          <cite class="muted">— Meera</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <p class="lead">Have a property to sell or want to schedule a viewing? Send a message.</p>
+
+      <form onsubmit="event.preventDefault(); alert('Thanks! We\'ll get back to you shortly.');">
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div>
+            <label for="name">Full Name</label>
+            <input id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div>
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" placeholder="+91‑" />
+          </div>
+          <div>
+            <label for="service">Service</label>
+            <select id="service" name="service">
+              <option>Buy</option>
+              <option>Sell</option>
+              <option>Rent</option>
+              <option>Consultation</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us about your needs"></textarea>
+        </div>
+        <button class="btn primary" type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="grid" style="grid-template-columns: 1fr auto; align-items:center;">
+        <small>©️ <span id="year"></span> Acme Real Estate. All rights reserved.</small>
+        <div>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          · <a href="#" aria-label="Instagram">Instagram</a>
+          · <a href="#" aria-label="LinkedIn">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
